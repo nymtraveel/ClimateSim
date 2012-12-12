@@ -13,22 +13,23 @@ public class Main
     public static void main( String[] args ) throws Exception {
 
 
-        ReadFile t = new ReadFile();
         float[][] heightMap = ReadFile.readFile("Heightmap.txt", "\n");
-        heightMap = dreheArray(heightMap);
+        heightMap = shiftArray(rotateArray(heightMap),-50,-100);
+        //try also other combinations with shift and rotate
+        //heightMap = rotateArray(heightMap);
 
         long start = System.currentTimeMillis();
         ClimateSimulator climate = new ClimateSimulator(heightMap);
+        System.out.println("Total time: " + (System.currentTimeMillis() - start) + " ms");
 
         JFrame f = new JFrame();
         JFrame f2 = new JFrame();
         JFrame f3 = new JFrame();
-
         JPanel panel = new DrawPanel(climate.getClimate(), "climate");
         JPanel panel2 = new DrawPanel(climate.getHumidity(), "humidity");
-        //JPanel panel2 = new DrawPanel(climate.distanceFrom("water",5), "distanceMap");
         JPanel panel3 = new DrawPanel(heightMap,  "heightmap");
-        System.out.println("Total time: " + (System.currentTimeMillis() - start) + " ms");
+
+
         f.setSize( 600 , 600 );
         f2.setSize( 600 , 600 );
         f3.setSize( 600 , 600 );
@@ -51,16 +52,25 @@ public class Main
         f3.setTitle("Heightmap");
     }
 
-    public static float[][] dreheArray(float[][] array) {
-        float[][] neuesArray = new float[array[0].length][array.length];
-
-        for (int i=0; i<neuesArray.length; i++) {
-            for (int j=0; j<neuesArray[0].length; j++) {
-                neuesArray[i][j] = array[j][array[j].length-i-1];
+    public static float[][] rotateArray(float[][] array) {
+        float[][] newArray = new float[array[0].length][array.length];
+        for (int i=0; i<newArray.length; i++) {
+            for (int j=0; j<newArray[0].length; j++) {
+                newArray[i][j] = array[j][array[j].length-i-1];
             }
         }
+        return newArray;
+    }
 
-        return neuesArray;
+    private static float[][] shiftArray(float[][] array,int x,int y){
+        int size = array.length;
+        float[][] newArray = new float[size][size];
+        for (int i=0; i<size; i++) {
+            for (int j=0; j<size; j++) {
+                newArray[i][j] = array[(i+x+size)%size][(j+y+size)%size];
+            }
+        }
+        return newArray;
     }
 
 

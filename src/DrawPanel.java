@@ -12,11 +12,10 @@ import javax.swing.*;
 class DrawPanel extends JPanel
 {
     private float[][] array;
-    private int[][] intArray;
     String type;
 
     DrawPanel(float[][] map, String input){
-        this.array=map;
+        this.array= map;
         this.type = input;
     }
 
@@ -29,9 +28,9 @@ class DrawPanel extends JPanel
         float tempColor;
         for (int row= 0;row < array.length;row++){
             for (int column= 0;column < array[row].length;column++){
-                tempColor =(float) (2+array[row][column])/4;
+                tempColor = (2+array[row][column])/4;
                 if (max < tempColor){max=tempColor;}
-                g.setColor( computeColor((float) array[row][column], type));
+                g.setColor( computeColor(array[row][column], type));
                 g.drawRect(column, row, 1, 1);
             }
         }
@@ -47,7 +46,6 @@ class DrawPanel extends JPanel
             if (value< -2) value = -2;
 
             float r,g,b;
-            r=b=g=0;
 
             if (value<-1) {
                 b=1;
@@ -65,7 +63,7 @@ class DrawPanel extends JPanel
             }
             return new Color(r,g,b);
         }
-        else if (type.equals("heightmap")){
+        else if (type.equals("heightmap")){ //copied from Laurie's plate tectonic simulation
             float COLOR_STEP = 2.0f;
             if (value < 0.5)
                 return new Color(0.0f, 0.0f, 0.25f + 1.5f * value);
@@ -95,11 +93,10 @@ class DrawPanel extends JPanel
             value*=2;
             if (value>1){
                 value = 1;
-                //System.out.println("Very Dry here :O");
+                // System.out.println("Very Dry here :O"); //debugging line
             }
 
             float r,g,b;
-            r=b=g=0;
 
             if (value<0){
                 r= value+1;
@@ -123,7 +120,6 @@ class DrawPanel extends JPanel
             if (value< -2) value = -2;
 
             float r,g,b;
-            r=b=g=0;
 
             if (value<-1) {
                 b=1;
