@@ -26,12 +26,12 @@ class DrawPanel extends JPanel
         float max=0;
         super.paintComponent( g );
         float tempColor;
-        for (int row= 0;row < array.length;row++){
-            for (int column= 0;column < array[row].length;column++){
-                tempColor = (2+array[row][column])/4;
+        for (int height= 0;height < array.length;height++){
+            for (int width= 0;width < array[height].length;width++){
+                tempColor = (2+array[height][width])/4;
                 if (max < tempColor){max=tempColor;}
-                g.setColor( computeColor(array[row][column], type));
-                g.drawRect(column, row, 1, 1);
+                g.setColor( computeColor(array[height][width], type));
+                g.drawRect(width, height, 1, 1);
             }
         }
     }

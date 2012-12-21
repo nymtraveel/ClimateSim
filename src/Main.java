@@ -26,7 +26,7 @@ public class Main
         JFrame f2 = new JFrame();
         JFrame f3 = new JFrame();
         JPanel panel = new DrawPanel(climate.getClimate(), "climate");
-        JPanel panel2 = new DrawPanel(climate.getHumidity(), "humidity");
+        JPanel panel2 = new DrawPanel(climate.gett2(), "climate");
         JPanel panel3 = new DrawPanel(heightMap,  "heightmap");
 
 
@@ -43,7 +43,7 @@ public class Main
         f2.setResizable(true);
         f2.add( panel2 );
         f2.setVisible( true );
-        f2.setTitle("Humidity");
+        f2.setTitle("t2");
 
         f3.setDefaultCloseOperation( EXIT_ON_CLOSE );
         f3.setResizable(true);
@@ -62,7 +62,7 @@ public class Main
         return newArray;
     }
 
-    private static float[][] shiftArray(float[][] array,int x,int y){
+    public static float[][] shiftArray(float[][] array,int x,int y){
         int size = array.length;
         float[][] newArray = new float[size][size];
         for (int i=0; i<size; i++) {

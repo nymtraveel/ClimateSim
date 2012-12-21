@@ -9,7 +9,7 @@ import sun.font.TrueTypeFont;
  */
 
 public class ClimateSimulator {
-    private float[][] heightmap,climate,humidity;
+    private float[][] heightmap,climate,humidity, t1, t2;
     //private float[][] blurLookup;
     private int size;
     //private int blurRange = 4;
@@ -20,17 +20,19 @@ public class ClimateSimulator {
 
         //Ready the Climate Map
         climate = new float[size][size];
-        float[][] t1 = distanceFrom("poles",10);
-        float[][] t2 = distanceFrom("equator",10);
+        t1 = distanceFrom("poles",20);
+        t2 = distanceFrom("equator",20);
+
         for(int width = 0; width < size; width++){
             for(int height = 0; height < size; height++){
                 climate[width][height] = t1[width][height] + t2[width][height] - 1;
             }
         }
-        overlayHeight(0,0);
+
+        overlayHeight(5,0);
 
         //Ready the HumidityMap
-        humidity = distanceFrom("water",5);
+        //humidity = distanceFrom("water",5);
 
         /*-----Old attempt-----
         //At first, climate is set accordingly to distance from poles/equator
@@ -99,7 +101,7 @@ public class ClimateSimulator {
             for(int width = 0; width < size; width++){
                 for(int height = 0; height < size; height++){
 
-                    if (height==size/2){  // topOfTheMap
+                    if (height==size/2){  // equator level
                         distArr[height][width] = 0;
                     }
                     else{
@@ -182,6 +184,7 @@ public class ClimateSimulator {
                     climate[height][width] =  distToEq*0.4f;
                 }
                 else {                // land
+                    heightFactor *= heightFactor;
                     climate[height][width] = ((100-strength)*climate[height][width] + strength *((distToEq*locationInfluence + (100-locationInfluence)*0.5f)*0.01f - heightFactor*0.05f))*0.01f;
                 }
             }
@@ -191,6 +194,16 @@ public class ClimateSimulator {
     public float[][] getClimate(){
         return climate;
     }
+
+
+    public float[][] gett1(){
+        return t1;
+    }
+
+    public float[][] gett2(){
+        return t2;
+    }
+
     public float[][] getHumidity(){
         return humidity;
     }

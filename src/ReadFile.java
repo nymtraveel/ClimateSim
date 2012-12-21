@@ -11,41 +11,10 @@ import java.util.Scanner;
 
 public class ReadFile {
 
-    public static float[][] Read(String address) throws Exception {
-        File input_file = new File (address);
-
-        float[][] theMap = new float[513][513];
-        int index = 0;
-
-        long start = System.currentTimeMillis();
-        float min=0;
-        float max=0;
-        Scanner scanner = new Scanner(input_file);
-
-        while(true) {
-                float a = scanner.nextFloat();
-                theMap[index%513][index/513] = a;
-                index++;
-                min = a<min ? a:min;
-                max = a>max ? a:max;
-                //System.out.println(a);
-            if(index<-1){break;}
-        }
-        System.out.println ("End of File");
-        System.out.println("passed time:");
-        System.out.println(System.currentTimeMillis() - start);
-
-        System.out.println("Min Value:");
-        System.out.println(min);
-        System.out.println("Max Value:");
-        System.out.println(max);
-        return theMap;
+    public static float[][] readFile(String file, String delimiter)
+                    throws Exception {
+        return(readValues(new java.io.FileInputStream(file), delimiter));
     }
-
-        public static float[][] readFile(String file, String delimiter)
-                throws Exception {
-            return(readValues(new java.io.FileInputStream(file), delimiter));
-        }
 
 
     public static float[][] readValues(java.io.InputStream in, String delimiter)
@@ -75,17 +44,6 @@ public class ReadFile {
             max = a>max ? a:max;
             if (index/512>511)break;
         }
-        /*
-        System.out.println ("End of File");
-        System.out.println("passed time:");
-        System.out.println(System.currentTimeMillis() - start);
-
-        System.out.println("Min Value:");
-        System.out.println(min);
-        System.out.println("Max Value:");
-        System.out.println(max);
-        */
-
         return(theMap);
     }
 }
