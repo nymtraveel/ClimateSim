@@ -137,6 +137,17 @@ class DrawPanel extends JPanel
             }
             return new Color(r,g,b);
         }
+
+        else if(type.equals("testSteepness")){
+            value /= 40;
+            if(value>1){
+                System.out.println(value);
+                value=1;
+
+            }
+            return new Color(value,value,value);
+        }
+
         else{
             System.out.println("Invalid Print-Type");
             return  new Color(0,0,0);

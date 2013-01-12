@@ -26,7 +26,7 @@ public class Main
         JFrame f2 = new JFrame();
         JFrame f3 = new JFrame();
         JPanel panel = new DrawPanel(climate.getClimate(), "climate");
-        JPanel panel2 = new DrawPanel(climate.gett2(), "climate");
+        JPanel panel2 = new DrawPanel(climate.getMountainyness(), "testSteepness");
         JPanel panel3 = new DrawPanel(heightMap,  "heightmap");
 
 
@@ -43,7 +43,7 @@ public class Main
         f2.setResizable(true);
         f2.add( panel2 );
         f2.setVisible( true );
-        f2.setTitle("t2");
+        f2.setTitle("Steepness");
 
         f3.setDefaultCloseOperation( EXIT_ON_CLOSE );
         f3.setResizable(true);
