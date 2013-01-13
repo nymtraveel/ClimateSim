@@ -13,43 +13,81 @@ public class Main
     public static void main( String[] args ) throws Exception {
 
 
-        float[][] heightMap = ReadFile.readFile("Heightmap.txt", "\n");
-        heightMap = shiftArray(rotateArray(heightMap),-50,-100);
+        /*
+        *  heigthmap1.txt: set hmSize to 512
+        *  otherwise 1024
+        *
+        */
+
+        long start = System.currentTimeMillis();
+        int hmSize = 1024;
+
+        long start1 = System.currentTimeMillis();
+        float[][] heightMap = ReadFile.readFile("heightmap3.txt", "\n", hmSize);
+        //heightMap = shiftArray(rotateArray(heightMap),-50,-100);
         //try also other combinations with shift and rotate
         //heightMap = rotateArray(heightMap);
 
-        long start = System.currentTimeMillis();
+        System.out.println("Reading file: " + (System.currentTimeMillis() - start1) + " ms");
+
         ClimateSimulator climate = new ClimateSimulator(heightMap);
+
+        JFrame c1 = new JFrame();
+        JFrame c2 = new JFrame();
+        JFrame c3 = new JFrame();
+        JFrame hum = new JFrame();
+        JFrame steep = new JFrame();
+        JFrame map = new JFrame();
+
+        JPanel panel = new DrawPanel(climate.getTpoles(), "climate");
+        c1.add(panel);
+        c1.setTitle("Distance to Poles");
+        c1.setSize(hmSize + 17, hmSize + 39);
+        c1.setDefaultCloseOperation(EXIT_ON_CLOSE);
+        c1.setResizable(true);
+        c1.setVisible(true);
+
+        JPanel panel2 = new DrawPanel(climate.getTequator(), "climate");
+        c2.add(panel2);
+        c2.setTitle("Distance to equator");
+        c2.setSize(hmSize + 17, hmSize + 39);
+        c2.setDefaultCloseOperation(EXIT_ON_CLOSE);
+        c2.setResizable(true);
+        c2.setVisible(true);
+
+        JPanel panel3 = new DrawPanel(climate.getClimate(),  "climate");
+        c3.add(panel3);
+        c3.setTitle("Climate");
+        c3.setSize(hmSize + 17, hmSize + 39);
+        c3.setDefaultCloseOperation(EXIT_ON_CLOSE);
+        c3.setResizable(true);
+        c3.setVisible(true);
+
+        JPanel panel4 = new DrawPanel(climate.getHumidity(),  "humidity");
+        hum.add(panel4);
+        hum.setTitle("Humidity");
+        hum.setSize(hmSize + 17, hmSize + 39);
+        hum.setDefaultCloseOperation(EXIT_ON_CLOSE);
+        hum.setResizable(true);
+        hum.setVisible(true);
+
+        JPanel panel5 = new DrawPanel(climate.getMountainyness(),  "Steepness");
+        steep.add(panel5);
+        steep.setTitle("Steepness");
+        steep.setSize(hmSize + 17, hmSize + 39);
+        steep.setDefaultCloseOperation(EXIT_ON_CLOSE);
+        steep.setResizable(true);
+        steep.setVisible(true);
+
+        JPanel panel6 = new DrawPanel(heightMap,  "heightmap");
+        map.add(panel6);
+        map.setTitle("Heightmap");
+        map.setSize(hmSize + 17, hmSize + 39);
+        map.setDefaultCloseOperation(EXIT_ON_CLOSE);
+        map.setResizable(true);
+        map.setVisible(true);
+
         System.out.println("Total time: " + (System.currentTimeMillis() - start) + " ms");
-
-        JFrame f = new JFrame();
-        JFrame f2 = new JFrame();
-        JFrame f3 = new JFrame();
-        JPanel panel = new DrawPanel(climate.getClimate(), "climate");
-        JPanel panel2 = new DrawPanel(climate.getMountainyness(), "testSteepness");
-        JPanel panel3 = new DrawPanel(heightMap,  "heightmap");
-
-
-        f.setSize( 600 , 600 );
-        f2.setSize( 600 , 600 );
-        f3.setSize( 600 , 600 );
-        f.setDefaultCloseOperation( EXIT_ON_CLOSE );
-        f.setResizable(true);
-        f.add( panel );
-        f.setVisible( true );
-        f.setTitle("Climate Map");
-
-        f2.setDefaultCloseOperation( EXIT_ON_CLOSE );
-        f2.setResizable(true);
-        f2.add( panel2 );
-        f2.setVisible( true );
-        f2.setTitle("Steepness");
-
-        f3.setDefaultCloseOperation( EXIT_ON_CLOSE );
-        f3.setResizable(true);
-        f3.add( panel3 );
-        f3.setVisible( true );
-        f3.setTitle("Heightmap");
     }
 
     public static float[][] rotateArray(float[][] array) {

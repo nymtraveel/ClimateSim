@@ -7,7 +7,7 @@
  */
 
 public class ClimateSimulator {
-    private float[][] heightmap,climate,humidity, t1, t2, mountainyness;
+    private float[][] heightmap,climate,humidity, tpoles, tequator, mountainyness;
     //private float[][] blurLookup;
     private int size;
     //private int blurRange = 4;
@@ -16,20 +16,39 @@ public class ClimateSimulator {
         heightmap = hm;
         size = heightmap.length;
 
+
+        long start = System.currentTimeMillis();
         //Ready the Climate Map
         climate = new float[size][size];
-        t1 = distanceFrom("poles",20);
-        t2 = distanceFrom("equator",20);
+        long startPoles = System.currentTimeMillis();
+        tpoles = distanceFrom("poles",20);
+        System.out.println("Poles: " + (System.currentTimeMillis() - startPoles) + " ms");
+
+        long startEquator = System.currentTimeMillis();
+        tequator = distanceFrom("equator",20);
+        System.out.println("Equator: " + (System.currentTimeMillis() - startEquator) + " ms");
+
+        long startCompose = System.currentTimeMillis();
         for(int width = 0; width < size; width++){
             for(int height = 0; height < size; height++){
-                climate[width][height] = t1[width][height] + t2[width][height] - 1;
+                climate[width][height] = tpoles[width][height] + tequator[width][height] - 1;
             }
         }
         overlayHeight(5,0);
+        System.out.println("Compose: " + (System.currentTimeMillis() - startCompose) + " ms");
 
+
+        long startWater = System.currentTimeMillis();
+        humidity = distanceFrom("water",20);
+        System.out.println("Humidity: " + (System.currentTimeMillis() - startWater) + " ms");
+
+
+        System.out.println("Climate: " + (System.currentTimeMillis() - start) + " ms");
+
+        long start1 = System.currentTimeMillis();
         //ready mountainyness
         steepSides();
-
+        System.out.println("Steep sides: " + (System.currentTimeMillis() - start1) + " ms");
     }
 
     private void steepSides(){
@@ -55,7 +74,6 @@ public class ClimateSimulator {
                 mountainyness[width][height] = (float)Math.pow(temp,1.4);
             }
         }
-        System.out.println("end mountainyness");
 
     }
 
@@ -172,7 +190,7 @@ public class ClimateSimulator {
     private void overlayHeight(int strength, int locationInfluence){
         for(int width = 0; width < size; width++){
             for(int height = 0; height < size; height++){
-                float distToEq =(float)(0.5f-Math.abs(((height/512.)*2)-1))*2;
+                float distToEq =(0.5f-Math.abs(((height/(float)size)*2)-1))*2;
                 float heightFactor = heightmap[height][width]-1;
 
                 if (heightFactor<0){  // sea
@@ -200,12 +218,12 @@ public class ClimateSimulator {
     }
 
 
-    public float[][] gett1(){
-        return t1;
+    public float[][] getTpoles(){
+        return tpoles;
     }
 
-    public float[][] gett2(){
-        return t2;
+    public float[][] getTequator(){
+        return tequator;
     }
 
     public float[][] getMountainyness(){

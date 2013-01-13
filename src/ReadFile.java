@@ -11,13 +11,13 @@ import java.util.Scanner;
 
 public class ReadFile {
 
-    public static float[][] readFile(String file, String delimiter)
+    public static float[][] readFile(String file, String delimiter, int size)
                     throws Exception {
-        return(readValues(new java.io.FileInputStream(file), delimiter));
+        return(readValues(new java.io.FileInputStream(file), delimiter, size));
     }
 
 
-    public static float[][] readValues(java.io.InputStream in, String delimiter)
+    public static float[][] readValues(java.io.InputStream in, String delimiter, int size)
             throws  java.io.FileNotFoundException,
             java.io.IOException,
             java.lang.NumberFormatException {
@@ -29,7 +29,7 @@ public class ReadFile {
         int index = 0;
         float min=0;
         float max=0;
-        float[][] theMap = new float[512][512];
+        float[][] theMap = new float[size][size];
         long start = System.currentTimeMillis();
 
         while ((thisLine = myInput.readLine()) != null) {
@@ -37,12 +37,12 @@ public class ReadFile {
             // scan it line by line
             java.util.StringTokenizer st = new java.util.StringTokenizer(thisLine, delimiter);
             float a = Float.valueOf(st.nextToken());
-            theMap[index/512][index%512] = a;
+            theMap[index/size][index%size] = a;
             //if (a>8) System.out.println(a + " at " +index%513 + " " + index/513);
             index++;
             min = a<min ? a:min;
             max = a>max ? a:max;
-            if (index/512>511)break;
+            if (index/size>size-1)break;
         }
         return(theMap);
     }
