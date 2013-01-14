@@ -23,7 +23,7 @@ public class Main
         int hmSize = 1024;
 
         long start1 = System.currentTimeMillis();
-        float[][] heightMap = ReadFile.readFile("heightmap3.txt", "\n", hmSize);
+        float[][] heightMap = ReadFile.readFile("heightmap5.txt", "\n", hmSize);
         //heightMap = shiftArray(rotateArray(heightMap),-50,-100);
         //try also other combinations with shift and rotate
         //heightMap = rotateArray(heightMap);
