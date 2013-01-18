@@ -42,7 +42,7 @@ class DrawPanel extends JPanel
             value *= 3;
 
             if (value>1){
-                System.out.println("Ouch, Hot! " + value);
+                //System.out.println("Ouch, Hot! " + value);
                 value = 1;
             }
             if (value< -2) value = -2;

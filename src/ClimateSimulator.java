@@ -74,7 +74,6 @@ public class ClimateSimulator {
         float span = max-min;
         for(int width = 0; width < size; width++){
             for(int height = 0; height < size; height++){
-                float curr = array[width][height];
                 array[width][height] = (array[width][height]-min)/span;
             }
         }
@@ -82,7 +81,7 @@ public class ClimateSimulator {
 
     private void steepSides(){
         mountainyness = new float[size][size];
-        System.out.println("starting mountainyness");
+        //System.out.println("starting steepness");
         for(int width = 0; width < size; width++){
             for(int height = 0; height < size; height++){
                 float currHeight = heightmap[width][height];
