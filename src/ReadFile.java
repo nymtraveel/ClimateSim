@@ -11,13 +11,13 @@ import java.util.Scanner;
 
 public class ReadFile {
 
-    public static float[][] readFile(String file, String delimiter, int size)
+    public static float[][] readFile(String file, String delimiter)
                     throws Exception {
-        return(readValues(new java.io.FileInputStream(file), delimiter, size));
+        return(readValues(new java.io.FileInputStream(file), delimiter));
     }
 
 
-    public static float[][] readValues(java.io.InputStream in, String delimiter, int size)
+    public static float[][] readValues(java.io.InputStream in, String delimiter)
             throws  java.io.FileNotFoundException,
             java.io.IOException,
             java.lang.NumberFormatException {
@@ -29,8 +29,11 @@ public class ReadFile {
         int index = 0;
         float min=0;
         float max=0;
+        thisLine = myInput.readLine();
+        java.util.StringTokenizer sta = new java.util.StringTokenizer(thisLine, delimiter);
+        int size = Integer.valueOf(sta.nextToken());
+
         float[][] theMap = new float[size][size];
-        long start = System.currentTimeMillis();
 
         while ((thisLine = myInput.readLine()) != null) {
 

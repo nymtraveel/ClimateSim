@@ -8,9 +8,7 @@
 
 public class ClimateSimulator {
     private float[][] heightmap,climate,humidity, tpoles, tequator, mountainyness;
-    //private float[][] blurLookup;
     private int size;
-    //private int blurRange = 4;
 
     ClimateSimulator(float[][] hm){
         heightmap = hm;
@@ -21,20 +19,23 @@ public class ClimateSimulator {
         //Ready the Climate Map
         climate = new float[size][size];
         long startPoles = System.currentTimeMillis();
-        tpoles = distanceFrom("poles",20);
+        tpoles = distanceFrom("poles",25);
         System.out.println("Poles: " + (System.currentTimeMillis() - startPoles) + " ms");
 
         long startEquator = System.currentTimeMillis();
-        tequator = distanceFrom("equator",20);
+        tequator = distanceFrom("equator",25);
         System.out.println("Equator: " + (System.currentTimeMillis() - startEquator) + " ms");
 
         long startCompose = System.currentTimeMillis();
         for(int width = 0; width < size; width++){
             for(int height = 0; height < size; height++){
-                climate[width][height] = tpoles[width][height] + tequator[width][height] - 1;
+                float distToEq =(0.5f-Math.abs(((height/(float)size)*2)-1))+0.25f;
+
+                climate[width][height] = tpoles[width][height]*(1-distToEq) + distToEq*tequator[width][height]-1;
             }
         }
-        overlayHeight(5,0);
+        normalize(climate);
+        overlayHeight(25,0);
         System.out.println("Compose: " + (System.currentTimeMillis() - startCompose) + " ms");
 
 
@@ -46,9 +47,37 @@ public class ClimateSimulator {
         System.out.println("Climate: " + (System.currentTimeMillis() - start) + " ms");
 
         long start1 = System.currentTimeMillis();
-        //ready mountainyness
+        //ready steepness
         steepSides();
         System.out.println("Steep sides: " + (System.currentTimeMillis() - start1) + " ms");
+
+        //normalizing
+
+        long start2 = System.currentTimeMillis();
+        normalize(climate);
+        normalize(humidity);
+        normalize(mountainyness);
+
+        System.out.println("Normalizing: " + (System.currentTimeMillis() - start2) + " ms");
+
+    }
+
+    private void normalize(float[][] array){
+        float min=0,max=0;
+        for(int width = 0; width < size; width++){
+            for(int height = 0; height < size; height++){
+                float curr = array[width][height];
+                min = min<curr? min:curr;
+                max = max>curr? max:curr;
+            }
+        }
+        float span = max-min;
+        for(int width = 0; width < size; width++){
+            for(int height = 0; height < size; height++){
+                float curr = array[width][height];
+                array[width][height] = (array[width][height]-min)/span;
+            }
+        }
     }
 
     private void steepSides(){
@@ -68,8 +97,9 @@ public class ClimateSimulator {
                 s[6] = heightmap[(width+1)%size][(height-1+size)%size]-currHeight;
                 s[7] = heightmap[(width-1+size)%size][(height-1+size)%size]-currHeight;
 
-                float temp = computeAbsMax(s)+heightmap[width][height]*0.2f;//multiplicator to be determined
-                temp -=0.5;
+                float slider = 0.8f; //value to be determined
+                float temp = computeAbsMax(s)*2*slider+(1-slider)*currHeight*currHeight*0.1f;
+                temp -=1;
                 temp = temp<0?0:temp;
                 mountainyness[width][height] = (float)Math.pow(temp,1.4);
             }
@@ -187,18 +217,24 @@ public class ClimateSimulator {
     }
 
 
-    private void overlayHeight(int strength, int locationInfluence){
+    private void overlayHeight(int strength, int threshold){
         for(int width = 0; width < size; width++){
             for(int height = 0; height < size; height++){
-                float distToEq =(0.5f-Math.abs(((height/(float)size)*2)-1))*2;
+                float distToEq = 1-Math.abs(((height/(float)size)*2)-1);
                 float heightFactor = heightmap[height][width]-1;
 
                 if (heightFactor<0){  // sea
-                    climate[height][width] =  distToEq*0.4f;
+                    climate[height][width] =  (distToEq+0.2f)*0.6f;
                 }
                 else {                // land
-                    heightFactor *= heightFactor;
-                    climate[height][width] = ((100-strength)*climate[height][width] + strength *((distToEq*locationInfluence + (100-locationInfluence)*0.5f)*0.01f - heightFactor*0.05f))*0.01f;
+                    heightFactor -= 4;
+                    if (heightFactor>=0) {
+                        float candidate = climate[height][width] - (strength * (heightFactor*0.05f)*(heightmap[height][width]-4)*0.4f)*0.001f;
+                        climate[height][width] = candidate<0?0:candidate;
+                    }
+                            //((distToEq*locationInfluence + (100-locationInfluence)*0.5f)*0.01f - heightFactor*0.05f))*0.01f;
+
+                    //climate[height][width] = ((100-strength)*climate[height][width] + strength *((distToEq*locationInfluence + (100-locationInfluence)*0.5f)*0.01f - heightFactor*0.05f))*0.01f;
                 }
             }
         }

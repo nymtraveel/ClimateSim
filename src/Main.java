@@ -12,18 +12,11 @@ public class Main
 {
     public static void main( String[] args ) throws Exception {
 
-
-        /*
-        *  heigthmap1.txt: set hmSize to 512
-        *  otherwise 1024
-        *
-        */
-
         long start = System.currentTimeMillis();
-        int hmSize = 1024;
 
         long start1 = System.currentTimeMillis();
-        float[][] heightMap = ReadFile.readFile("heightmap5.txt", "\n", hmSize);
+        float[][] heightMap = ReadFile.readFile("heightmap5.txt", "\n");
+        int hmSize = heightMap.length;
         //heightMap = shiftArray(rotateArray(heightMap),-50,-100);
         //try also other combinations with shift and rotate
         //heightMap = rotateArray(heightMap);
@@ -38,7 +31,7 @@ public class Main
         JFrame hum = new JFrame();
         JFrame steep = new JFrame();
         JFrame map = new JFrame();
-
+        /*
         JPanel panel = new DrawPanel(climate.getTpoles(), "climate");
         c1.add(panel);
         c1.setTitle("Distance to Poles");
@@ -54,7 +47,7 @@ public class Main
         c2.setDefaultCloseOperation(EXIT_ON_CLOSE);
         c2.setResizable(true);
         c2.setVisible(true);
-
+          */
         JPanel panel3 = new DrawPanel(climate.getClimate(),  "climate");
         c3.add(panel3);
         c3.setTitle("Climate");

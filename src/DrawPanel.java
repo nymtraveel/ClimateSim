@@ -38,10 +38,12 @@ class DrawPanel extends JPanel
 
     private Color computeColor (float value, String type){
         if (type.equals("climate")) {
+            value -= 0.666;
+            value *= 3;
 
             if (value>1){
+                System.out.println("Ouch, Hot! " + value);
                 value = 1;
-                System.out.println("Ouch, Hot!");
             }
             if (value< -2) value = -2;
 
@@ -139,7 +141,7 @@ class DrawPanel extends JPanel
         }
 
         else if(type.equals("Steepness")){
-            value /= 40;
+            //value /= 40;
             if(value>1){
                 //System.out.println(value);
                 value=1;
